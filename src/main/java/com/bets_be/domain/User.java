@@ -39,11 +39,12 @@ public class User {
             mappedBy = "user",
             cascade = CascadeType.ALL
     )
-    private List<Coupon> coupons = new ArrayList<>();
+    private List<Coupon> coupons;
 
     public User(String name, String login, String mail) {
         this.name = name;
         this.login = login;
         this.mail = mail;
+        this.coupons = new ArrayList<>();
     }
 }
