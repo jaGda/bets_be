@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -18,7 +20,7 @@ public class User {
     @GeneratedValue
     @NotNull
     @Column(name = "ID", unique = true)
-    private Long userId;
+    private Long id;
 
     @NotNull
     @Column(name = "NAME")
@@ -31,6 +33,14 @@ public class User {
     @NotNull
     @Column(name = "MAIL")
     private String mail;
+
+    @OneToMany(
+            targetEntity = Coupon.class,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Coupon> coupons = new ArrayList<>();
 
     public User(String name, String login, String mail) {
         this.name = name;

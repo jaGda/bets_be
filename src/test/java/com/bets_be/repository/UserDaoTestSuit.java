@@ -24,7 +24,7 @@ class UserDaoTestSuit {
         //When
         userDao.save(user);
         //Then
-        Long id = user.getUserId();
+        Long id = user.getId();
         Optional<User> savedUser = userDao.findById(id);
         assertTrue(savedUser.isPresent());
         //CleanUp
@@ -42,6 +42,6 @@ class UserDaoTestSuit {
         //Then
         assertEquals(1, savedUsers.size());
         //CleanUp
-        userDao.deleteById(user.getUserId());
+        userDao.deleteById(user.getId());
     }
 }
