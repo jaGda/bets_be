@@ -37,8 +37,7 @@ public class User {
     @OneToMany(
             targetEntity = Coupon.class,
             mappedBy = "user",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
+            cascade = CascadeType.ALL
     )
     private List<Coupon> coupons = new ArrayList<>();
 

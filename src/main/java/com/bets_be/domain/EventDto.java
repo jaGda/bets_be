@@ -1,4 +1,4 @@
 package com.bets_be.domain;
 
-public class EventsDto {
+public class EventDto {
 }
