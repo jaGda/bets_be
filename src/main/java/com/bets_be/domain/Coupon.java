@@ -17,14 +17,15 @@ import java.util.List;
 public class Coupon {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @NotNull
     @Column(name = "ID", unique = true)
     private Long id;
 
     @ManyToOne(
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.EAGER
+    )
     @JoinColumn(name = "USER_ID")
     private User user;
 

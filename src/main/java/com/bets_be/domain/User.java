@@ -17,7 +17,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @NotNull
     @Column(name = "ID", unique = true)
     private Long id;
@@ -37,7 +37,7 @@ public class User {
     @OneToMany(
             targetEntity = Coupon.class,
             mappedBy = "user",
-            cascade = CascadeType.ALL
+            fetch = FetchType.EAGER
     )
     private List<Coupon> coupons;
 
