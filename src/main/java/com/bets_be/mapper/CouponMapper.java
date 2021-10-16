@@ -24,8 +24,8 @@ public class CouponMapper {
     public Coupon mapToCoupon(CouponDto couponDto) {
         return new Coupon(
                 couponDto.getId(),
-                userDao.findById(couponDto.getId()).orElseThrow(
-                        () -> new RuntimeException("User of id '" + couponDto.getId() + "' doesn't exist")
+                userDao.findById(couponDto.getUserId()).orElseThrow(
+                        () -> new RuntimeException("User of id '" + couponDto.getUserId() + "' doesn't exist")
                 ),
                 couponDto.getEventsId().stream()
                         .map(eventDao::findById)
