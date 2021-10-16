@@ -28,10 +28,13 @@ class CouponDaoTestSuit {
         //When
         couponDao.saveAll(List.of(coupon1, coupon2));
         //Then
-        Long id = user.getId();
         List<Coupon> result = couponDao.findAllByUser(user);
         assertEquals(2, result.size());
         //CleanUp
-        userDao.deleteById(id);
+        try {
+            couponDao.deleteById(coupon1.getId());
+        } catch (Exception e) {
+            // do nothing
+        }
     }
 }
