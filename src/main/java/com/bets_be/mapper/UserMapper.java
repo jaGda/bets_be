@@ -4,17 +4,17 @@ import com.bets_be.domain.Coupon;
 import com.bets_be.domain.User;
 import com.bets_be.domain.UserDto;
 import com.bets_be.repository.CouponDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserMapper {
 
-    @Autowired
-    private CouponDao couponDao;
+    private final CouponDao couponDao;
 
     public User mapToUser(UserDto userDto) {
         return new User(
@@ -45,6 +45,4 @@ public class UserMapper {
                 .map(this::mapToUserDto)
                 .collect(Collectors.toList());
     }
-
-
 }

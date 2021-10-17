@@ -5,7 +5,7 @@ import com.bets_be.domain.CouponDto;
 import com.bets_be.domain.Event;
 import com.bets_be.repository.EventDao;
 import com.bets_be.repository.UserDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,13 +13,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CouponMapper {
 
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private EventDao eventDao;
+    private final UserDao userDao;
+    private final EventDao eventDao;
 
     public Coupon mapToCoupon(CouponDto couponDto) {
         return new Coupon(
