@@ -23,14 +23,14 @@ public class Coupon {
     private Long id;
 
     @ManyToOne(
-            cascade = CascadeType.ALL,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
             fetch = FetchType.EAGER
     )
     @JoinColumn(name = "USER_ID")
     private User user;
 
     @ManyToMany(
-            cascade = CascadeType.ALL,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
             fetch = FetchType.EAGER
     )
     @JoinTable(
