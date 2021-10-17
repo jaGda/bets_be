@@ -50,6 +50,9 @@ class EventDaoTestSuit {
             couponDao.deleteById(coupon1.getId());
             couponDao.deleteById(coupon2.getId());
             couponDao.deleteById(coupon3.getId());
+            eventDao.deleteById(event1.getId());
+            eventDao.deleteById(event2.getId());
+            eventDao.deleteById(event3.getId());
         } catch (Exception e) {
             // do nothing
         }

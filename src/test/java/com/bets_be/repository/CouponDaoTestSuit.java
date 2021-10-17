@@ -33,6 +33,8 @@ class CouponDaoTestSuit {
         //CleanUp
         try {
             couponDao.deleteById(coupon1.getId());
+            couponDao.deleteById(coupon2.getId());
+            userDao.deleteById(user.getId());
         } catch (Exception e) {
             // do nothing
         }
