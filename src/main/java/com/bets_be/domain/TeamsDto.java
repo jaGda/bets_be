@@ -1,4 +1,4 @@
-package com.bets_be.domain.footballResponseObjects;
+package com.bets_be.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,14 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FixtureDto {
+public class TeamsDto {
 
-    @JsonProperty("fixture")
-    private FixtureDetailsDto fixtureDetailsDto;
+    @JsonProperty("home")
+    private HomeDto homeDto;
 
-    @JsonProperty("teams")
-    private TeamsDto teamsDto;
-
-    @JsonProperty("goals")
-    private GoalsDto goalsDto;
+    @JsonProperty("away")
+    private AwayDto awayDto;
 }
