@@ -14,8 +14,8 @@ public class EventDto {
     private Long id;
     private List<Long> couponsId;
     private Long fixtureId;
-    private LocalDate fixtureDate;
-    private LocalTime fixtureTime;
+    private String fixtureDate;
+    private String fixtureTime;
     private String statusLong;
     private String statusShort;
     private Long homeTeamId;
@@ -24,7 +24,7 @@ public class EventDto {
     private String awayTeamName;
     private int homeGoals;
     private int awayGoals;
-    private double betOnHome;
-    private double betOnDraw;
-    private double betOnAway;
+    private String betValue;
+    private double odd;
+    private boolean isWin;
 }

@@ -32,8 +32,6 @@ public class Event {
     )
     private List<Coupon> couponList = new ArrayList<>();
 
-    @NotNull
-    @Column(unique = true)
     private Long fixtureId;
     private LocalDate fixtureDate;
     private LocalTime fixtureTime;
@@ -45,16 +43,12 @@ public class Event {
     private String awayTeamName;
     private int homeGoals;
     private int awayGoals;
-    private double betOnHome;
-    private double betOnDraw;
-    private double betOnAway;
+    private String betValue;
+    private double odd;
+    private boolean isWin;
 
     public void addCoupon(Coupon coupon) {
         couponList.add(coupon);
         coupon.getEventList().add(this);
-    }
-
-    public Event(Long fixtureId) {
-        this.fixtureId = fixtureId;
     }
 }

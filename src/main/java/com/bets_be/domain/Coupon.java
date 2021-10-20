@@ -32,7 +32,7 @@ public class Coupon {
     private User user;
 
     @ManyToMany(
-            cascade = {CascadeType.PERSIST,CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
             fetch = FetchType.EAGER
     )
     @JoinTable(
