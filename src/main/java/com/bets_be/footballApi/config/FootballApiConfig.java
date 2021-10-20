@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FootballApiConfig {
 
-    @Value("${football.api.endpoint.fixtures.prod}")
+    @Value("${football.api.endpoint.prod}")
     private String footballApiEndpoint;
 
     @Value("${football.api.host.key}")
