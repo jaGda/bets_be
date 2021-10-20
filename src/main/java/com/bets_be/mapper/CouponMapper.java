@@ -5,9 +5,12 @@ import com.bets_be.domain.CouponDto;
 import com.bets_be.domain.Event;
 import com.bets_be.repository.EventDao;
 import com.bets_be.repository.UserDao;
+import com.bets_be.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +21,7 @@ public class CouponMapper {
 
     private final UserDao userDao;
     private final EventDao eventDao;
+    private final CouponService couponService;
 
     public Coupon mapToCoupon(CouponDto couponDto) {
         return new Coupon(
@@ -31,10 +35,10 @@ public class CouponMapper {
                         .map(Optional::get)
                         .collect(Collectors.toList()),
                 couponDto.getStake(),
-                couponDto.getWinnings(),
-                couponDto.getBetDate(),
-                couponDto.getBetTime(),
-                couponDto.isVictory()
+                couponService.calculateWinning(couponDto.getEventsId(), couponDto.getStake()),
+                LocalDate.parse(couponDto.getBetDate()),
+                LocalTime.parse(couponDto.getBetTime()),
+                couponDto.isVictory() || couponService.isWinning(couponDto.getEventsId())
         );
     }
 
@@ -47,8 +51,8 @@ public class CouponMapper {
                         .collect(Collectors.toList()),
                 coupon.getStake(),
                 coupon.getWinnings(),
-                coupon.getBetDate(),
-                coupon.getBetTime(),
+                coupon.getBetDate().toString(),
+                coupon.getBetTime().toString(),
                 coupon.isVictory()
         );
     }

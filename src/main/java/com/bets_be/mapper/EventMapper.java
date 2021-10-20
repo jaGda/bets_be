@@ -1,6 +1,9 @@
 package com.bets_be.mapper;
 
-import com.bets_be.domain.*;
+import com.bets_be.domain.Coupon;
+import com.bets_be.domain.Event;
+import com.bets_be.domain.EventDto;
+import com.bets_be.domain.FixtureDto;
 import com.bets_be.repository.CouponDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,8 +32,8 @@ public class EventMapper {
                         .map(Optional::get)
                         .collect(Collectors.toList()),
                 eventDto.getFixtureId(),
-                eventDto.getFixtureDate(),
-                eventDto.getFixtureTime(),
+                LocalDate.parse(eventDto.getFixtureDate()),
+                LocalTime.parse(eventDto.getFixtureTime()),
                 eventDto.getStatusLong(),
                 eventDto.getStatusShort(),
                 eventDto.getHomeTeamId(),
@@ -39,9 +42,9 @@ public class EventMapper {
                 eventDto.getAwayTeamName(),
                 eventDto.getHomeGoals(),
                 eventDto.getAwayGoals(),
-                eventDto.getBetOnHome(),
-                eventDto.getBetOnDraw(),
-                eventDto.getBetOnAway()
+                eventDto.getBetValue(),
+                eventDto.getOdd(),
+                eventDto.isWin()
         );
     }
 
@@ -52,8 +55,8 @@ public class EventMapper {
                         .map(Coupon::getId)
                         .collect(Collectors.toList()),
                 event.getFixtureId(),
-                event.getFixtureDate(),
-                event.getFixtureTime(),
+                event.getFixtureDate().toString(),
+                event.getFixtureTime().toString(),
                 event.getStatusLong(),
                 event.getStatusShort(),
                 event.getHomeTeamId(),
@@ -62,9 +65,9 @@ public class EventMapper {
                 event.getAwayTeamName(),
                 event.getHomeGoals(),
                 event.getAwayGoals(),
-                event.getBetOnHome(),
-                event.getBetOnDraw(),
-                event.getBetOnAway()
+                event.getBetValue(),
+                event.getOdd(),
+                event.isWin()
         );
     }
 
@@ -74,7 +77,7 @@ public class EventMapper {
                 .collect(Collectors.toList());
     }
 
-    public Event mapToEvent(FixtureDto fixtureDto) {
+    public Event mapToEvent(FixtureDto fixtureDto, String betValue) {
         return new Event(
                 0L,
                 new ArrayList<>(),
@@ -89,7 +92,8 @@ public class EventMapper {
                 fixtureDto.getTeamsDto().getAwayDto().getName(),
                 fixtureDto.getGoalsDto().getHome(),
                 fixtureDto.getGoalsDto().getAway(),
-                0, 0, 0
+                betValue, 0,
+                false
         );
     }
 
@@ -104,13 +108,13 @@ public class EventMapper {
         event.setAwayTeamName(fixtureDto.getTeamsDto().getAwayDto().getName());
         event.setHomeGoals(fixtureDto.getGoalsDto().getHome());
         event.setAwayGoals(fixtureDto.getGoalsDto().getAway());
+        event.setWin(checkIsWin(event.getStatusShort(), event.getBetValue(), fixtureDto.getGoalsDto().getHome(), fixtureDto.getGoalsDto().getAway()));
         return event;
     }
 
-    public Event mapToEvent(Event event, OddDto oddDto) {
-        event.setBetOnHome(Double.parseDouble(oddDto.getBookmakerDtoList().get(0).getBetsDtoList().get(0).getBetValueDtoList().get(0).getOdd()));
-        event.setBetOnDraw(Double.parseDouble(oddDto.getBookmakerDtoList().get(0).getBetsDtoList().get(0).getBetValueDtoList().get(1).getOdd()));
-        event.setBetOnAway(Double.parseDouble(oddDto.getBookmakerDtoList().get(0).getBetsDtoList().get(0).getBetValueDtoList().get(2).getOdd()));
-        return event;
+    public boolean checkIsWin(String status, String betValue, int homeGoals, int awayGoals) {
+        return status.equals("FT") && (homeGoals > awayGoals ? "Home".equals(betValue)
+                : homeGoals == awayGoals ? "Draw".equals(betValue)
+                : "Away".equals(betValue));
     }
 }
