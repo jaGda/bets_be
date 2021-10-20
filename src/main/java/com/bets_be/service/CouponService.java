@@ -1,17 +1,38 @@
 package com.bets_be.service;
 
 import com.bets_be.domain.Coupon;
+import com.bets_be.domain.Event;
 import com.bets_be.repository.CouponDao;
+import com.bets_be.repository.EventDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CouponService {
 
     private final CouponDao couponDao;
+    private final EventDao eventDao;
+
+    public double calculateWinning(List<Long> events, double stake) {
+        return stake * events.stream()
+                .map(eventDao::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .mapToDouble(Event::getOdd)
+                .sum();
+    }
+
+    public boolean isWinning(List<Long> events) {
+        return events.stream()
+                .map(eventDao::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(Event::isWin).count() == events.size();
+    }
 
     public List<Coupon> getAllCoupons() {
         return couponDao.findAll();

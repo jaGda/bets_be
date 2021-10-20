@@ -12,7 +12,7 @@ class EventSchedulerTestSuit {
 
     @Test
     void test() {
-        eventScheduler.updateFixtures();
-        eventScheduler.updateOdds();
+//        eventScheduler.updateFixtures();
+//        eventScheduler.updateOdds();
     }
 }

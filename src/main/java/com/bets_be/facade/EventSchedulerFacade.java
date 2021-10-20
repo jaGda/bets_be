@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Component
@@ -25,12 +25,19 @@ public class EventSchedulerFacade {
 
     public void fetchFixturesAndUpdateDB() {
         footballApiService.fetchFixtures().forEach(fixtureDto -> {
-            if (eventService.findEventByFixtureId(fixtureDto.getFixtureDetailsDto().getId()).isPresent()) {
-                eventService.updateEvent(eventMapper.mapToEvent(eventService.findEventByFixtureId(fixtureDto.getFixtureDetailsDto().getId()).get(), fixtureDto));
+            List<Event> eventList = eventService.findEventsByFixtureId(fixtureDto.getFixtureDetailsDto().getId());
+            if (eventList.isEmpty()) {
+                Stream.of("Home", "Draw", "Away")
+                        .forEach(s -> {
+                            eventService.addEvent(eventMapper.mapToEvent(fixtureDto, s));
+                            LOGGER.info("Football fixture has been created and added to the DB...");
+                        });
             } else {
-                eventService.addEvent(eventMapper.mapToEvent(fixtureDto));
+                eventList.forEach(event -> {
+                    eventService.updateEvent(eventMapper.mapToEvent(event, fixtureDto));
+                    LOGGER.info("Football fixture has been updated");
+                });
             }
-            LOGGER.info("Football fixtures are updating...");
         });
     }
 
@@ -39,9 +46,21 @@ public class EventSchedulerFacade {
                 .map(i -> LocalDate.now().plusDays(i))
                 .forEach(localDate -> {
                     footballApiService.fetchOdds(localDate).forEach(oddDto -> {
-                        Optional<Event> optionalEvent = eventService.findEventByFixtureId(oddDto.getFixtureIdDto().getId());
-                        optionalEvent.ifPresent(event -> eventService.updateEvent(eventMapper.mapToEvent(event, oddDto)));
-                        LOGGER.info("Betting odds are updating...");
+                        List<Event> eventList = eventService.findEventsByFixtureId(oddDto.getFixtureIdDto().getId());
+                        if (!eventList.isEmpty()) {
+                            eventList.forEach(event -> {
+                                oddDto.getBookmakerDtoList().get(0).getBetsDtoList().get(0).getBetValueDtoList()
+                                        .forEach(betValueDto -> {
+                                            if (betValueDto.getValue().equals(event.getBetValue())) {
+                                                event.setOdd(Double.parseDouble(betValueDto.getOdd()));
+                                                eventService.updateEvent(event);
+                                                LOGGER.info("Betting odd has been updated...");
+                                            }
+                                        });
+                            });
+                        } else {
+                            LOGGER.info("Betting odds aren't updating because indicated fixture doesn't exist in the DB...");
+                        }
                     });
                 });
     }

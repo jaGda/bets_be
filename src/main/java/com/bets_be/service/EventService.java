@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class EventService {
         eventDao.deleteById(eventId);
     }
 
-    public Optional<Event> findEventByFixtureId(Long fixtureId) {
-        return eventDao.findByFixtureId(fixtureId);
+    public List<Event> findEventsByFixtureId(Long fixtureId) {
+        return eventDao.findAllByFixtureId(fixtureId);
     }
 }
