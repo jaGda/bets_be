@@ -26,6 +26,7 @@ class CouponDaoTestSuit {
         Coupon coupon1 = new Coupon(user);
         Coupon coupon2 = new Coupon(user);
         //When
+        userDao.save(user);
         couponDao.saveAll(List.of(coupon1, coupon2));
         //Then
         List<Coupon> result = couponDao.findAllByUser(user);
