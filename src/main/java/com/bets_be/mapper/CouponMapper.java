@@ -29,7 +29,12 @@ public class CouponMapper {
                         .map(eventDao::findById)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                couponDto.getStake(),
+                couponDto.getWinnings(),
+                couponDto.getBetDate(),
+                couponDto.getBetTime(),
+                couponDto.isVictory()
         );
     }
 
@@ -39,7 +44,12 @@ public class CouponMapper {
                 coupon.getUser().getId(),
                 coupon.getEventList().stream()
                         .map(Event::getId)
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                coupon.getStake(),
+                coupon.getWinnings(),
+                coupon.getBetDate(),
+                coupon.getBetTime(),
+                coupon.isVictory()
         );
     }
 
