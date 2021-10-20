@@ -33,7 +33,7 @@ public class EventController {
 
     @PutMapping
     public EventDto updateEvent(@RequestBody EventDto eventDto) {
-        return mapper.mapToEventDto(service.addEvent(mapper.mapToEvent(eventDto)));
+        return mapper.mapToEventDto(service.updateEvent(mapper.mapToEvent(eventDto)));
     }
 
     @DeleteMapping("/{eventId}")
