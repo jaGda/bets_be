@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,20 +19,20 @@ import java.util.List;
 public class Coupon {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
     @Column(name = "ID", unique = true)
     private Long id;
 
     @ManyToOne(
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
             fetch = FetchType.EAGER
     )
     @JoinColumn(name = "USER_ID")
     private User user;
 
     @ManyToMany(
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+            cascade = {CascadeType.PERSIST,CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH},
             fetch = FetchType.EAGER
     )
     @JoinTable(
@@ -39,6 +41,12 @@ public class Coupon {
             inverseJoinColumns = {@JoinColumn(name = "EVENT_ID", referencedColumnName = "ID")}
     )
     private List<Event> eventList = new ArrayList<>();
+
+    private double stake;
+    private double winnings;
+    private LocalDate betDate;
+    private LocalTime betTime;
+    private boolean isVictory;
 
     public Coupon(User user) {
         this.user = user;
