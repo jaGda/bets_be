@@ -1,29 +1,30 @@
 package com.bets_be.controller;
 
-import com.bets_be.domain.FixturesDto;
-import com.bets_be.domain.OddsDto;
-import com.bets_be.footballApi.client.FootballApiClient;
+import com.bets_be.domain.FixtureDto;
+import com.bets_be.domain.OddDto;
+import com.bets_be.service.FootballApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping
 public class FootballApiController {
 
-    private final FootballApiClient footballApiClient;
+    private final FootballApiService service;
 
     @GetMapping("/fixtures")
-    public FixturesDto getFixtures() {
-        return footballApiClient.getFixtures();
+    public List<FixtureDto> getFixtures() {
+        return service.fetchFixtures();
     }
 
     @GetMapping("/odds")
-    public OddsDto getOdds() {
-        return footballApiClient.getOdds(LocalDate.now().plusDays(4));
+    public List<OddDto> getOdds() {
+        return service.fetchOdds(LocalDate.now());
     }
 }
