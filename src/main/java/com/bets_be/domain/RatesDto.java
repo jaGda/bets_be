@@ -15,7 +15,7 @@ public class RatesDto {
     @JsonProperty("PLN")
     private CurrencyNameDto currencyPlnName;
 
-    @JsonProperty("USA")
+    @JsonProperty("USD")
     private CurrencyNameDto currencyUsaName;
 
     @JsonProperty("EUR")

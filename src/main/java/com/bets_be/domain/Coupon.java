@@ -41,9 +41,11 @@ public class Coupon {
             inverseJoinColumns = {@JoinColumn(name = "EVENT_ID", referencedColumnName = "ID")}
     )
     private List<Event> eventList = new ArrayList<>();
-
+    private String betCurrency;
     private double stake;
-    private double winnings;
+    private double winningsPLN;
+    private double winningsUSA;
+    private double winningsEUR;
     private LocalDate betDate;
     private LocalTime betTime;
     private boolean isVictory;

@@ -12,8 +12,11 @@ public class CouponDto {
     private Long id;
     private Long userId;
     private List<Long> eventsId;
+    private String betCurrency;
     private double stake;
-    private double winnings;
+    private double winningsPLN;
+    private double winningsUSA;
+    private double winningsEUR;
     private String betDate;
     private String betTime;
     private boolean isVictory;
