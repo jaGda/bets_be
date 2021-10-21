@@ -40,4 +40,20 @@ public class EventController {
     public void deleteEvent(@PathVariable Long eventId) {
         service.removeEventById(eventId);
     }
+
+    @GetMapping("/fixture/{fixtureId}")
+    public List<EventDto> getEventsByFixtureId(@PathVariable Long fixtureId) {
+        return mapper.mapToEventDtoList(service.findEventsByFixtureId(fixtureId));
+    }
+
+    @GetMapping("/date/{date}")
+    public List<EventDto> getEventsByDate(@PathVariable String date) {
+        return mapper.mapToEventDtoList(service.findEventsByDate(date));
+    }
+
+    @GetMapping("/{from}/{to}")
+    public List<EventDto> getEventsByDateBetween(@PathVariable("from") String from,
+                                                 @PathVariable("to") String to) {
+        return mapper.mapToEventDtoList(service.findEventsBetweenDates(from, to));
+    }
 }
