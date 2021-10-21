@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @Transactional
@@ -15,4 +16,8 @@ public interface EventDao extends CrudRepository<Event, Long> {
     List<Event> findAll();
 
     List<Event> findAllByFixtureId(Long id);
+
+    List<Event> findAllByFixtureDate(LocalDate date);
+
+    List<Event> findAllByFixtureDateBetween(LocalDate from, LocalDate to);
 }
