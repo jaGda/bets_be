@@ -5,23 +5,20 @@ import com.bets_be.domain.CurrencyDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
 public class CurrencyConverterApiClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyConverterApiClient.class);
-
     private final RestTemplate restTemplate;
     private final CurrencyConverterApiConfig config;
 
@@ -34,6 +31,8 @@ public class CurrencyConverterApiClient {
                 .build().encode().toUri();
 
         HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.set(config.getHeaderHostKey(), config.getHeaderHostValue());
         headers.set(config.getCurrencyConverterApiKey(), config.getCurrencyConverterApiValue());
 
