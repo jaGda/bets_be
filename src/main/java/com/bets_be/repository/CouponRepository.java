@@ -10,7 +10,7 @@ import java.util.List;
 
 @Transactional
 @Repository
-public interface CouponDao extends CrudRepository<Coupon, Long> {
+public interface CouponRepository extends CrudRepository<Coupon, Long> {
 
     @Override
     List<Coupon> findAll();

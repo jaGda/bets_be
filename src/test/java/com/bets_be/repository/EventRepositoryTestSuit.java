@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
-class EventDaoTestSuit {
+class EventRepositoryTestSuit {
 
     @Autowired
-    private EventDao eventDao;
+    private EventRepository eventRepository;
 
     @Autowired
-    private CouponDao couponDao;
+    private CouponRepository couponRepository;
 
     @Test
     void testSaveManyToMany() {
@@ -29,7 +29,7 @@ class EventDaoTestSuit {
         Event event1 = new Event();
         Event event2 = new Event();
         Event event3 = new Event();
-        eventDao.saveAll(List.of(event1, event2, event3));
+        eventRepository.saveAll(List.of(event1, event2, event3));
         event1.addCoupon(coupon1);
         event1.addCoupon(coupon2);
         event1.addCoupon(coupon3);
@@ -37,22 +37,22 @@ class EventDaoTestSuit {
         event2.addCoupon(coupon3);
         event3.addCoupon(coupon2);
         //When
-        couponDao.saveAll(List.of(coupon1, coupon2, coupon3));
+        couponRepository.saveAll(List.of(coupon1, coupon2, coupon3));
         //Then
         assertAll(() -> {
-            assertNotEquals(0, couponDao.findAll().size());
-            assertNotEquals(0, eventDao.findAll().size());
-            assertNotEquals(0, eventDao.findById(event1.getId()).orElseGet(Event::new).getCouponList().size());
-            assertNotEquals(0, couponDao.findById(coupon2.getId()).orElseGet(Coupon::new).getEventList().size());
+            assertNotEquals(0, couponRepository.findAll().size());
+            assertNotEquals(0, eventRepository.findAll().size());
+            assertNotEquals(0, eventRepository.findById(event1.getId()).orElseGet(Event::new).getCouponList().size());
+            assertNotEquals(0, couponRepository.findById(coupon2.getId()).orElseGet(Coupon::new).getEventList().size());
         });
         //CleanUp
         try {
-            couponDao.deleteById(coupon1.getId());
-            couponDao.deleteById(coupon2.getId());
-            couponDao.deleteById(coupon3.getId());
-            eventDao.deleteById(event1.getId());
-            eventDao.deleteById(event2.getId());
-            eventDao.deleteById(event3.getId());
+            couponRepository.deleteById(coupon1.getId());
+            couponRepository.deleteById(coupon2.getId());
+            couponRepository.deleteById(coupon3.getId());
+            eventRepository.deleteById(event1.getId());
+            eventRepository.deleteById(event2.getId());
+            eventRepository.deleteById(event3.getId());
         } catch (Exception e) {
             // do nothing
         }

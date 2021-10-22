@@ -2,7 +2,7 @@ package com.bets_be.service;
 
 import com.bets_be.domain.Event;
 import com.bets_be.loggerInfo.LoggerMessage;
-import com.bets_be.repository.EventDao;
+import com.bets_be.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,51 +16,51 @@ import java.util.List;
 public class EventService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventService.class);
-    private final EventDao eventDao;
+    private final EventRepository eventRepository;
 
     public List<Event> getAllEvents() {
         LOGGER.info(LoggerMessage.FETCH.getMessage("getAllEvents"));
-        return eventDao.findAll();
+        return eventRepository.findAll();
     }
 
     public Event getEventById(Long eventId) {
         LOGGER.info(LoggerMessage.FETCH.getMessage("getEventById"));
-        return eventDao.findById(eventId).orElseThrow(
+        return eventRepository.findById(eventId).orElseThrow(
                 () -> new RuntimeException("Event of id '" + eventId + "' doesn't exist")
         );
     }
 
     public Event addEvent(Event event) {
         LOGGER.info(LoggerMessage.CREATE.getMessage("addEvent"));
-        return eventDao.save(event);
+        return eventRepository.save(event);
     }
 
     public Event updateEvent(Event event) {
         LOGGER.info(LoggerMessage.UPDATE.getMessage("updateEvent"));
-        if (eventDao.findById(event.getId()).isEmpty()) {
+        if (eventRepository.findById(event.getId()).isEmpty()) {
             throw new RuntimeException("Event of id '" + event.getId() + "' doesn't exist");
         } else {
-            return eventDao.save(event);
+            return eventRepository.save(event);
         }
     }
 
     public void removeEventById(Long eventId) {
         LOGGER.info(LoggerMessage.DELETE.getMessage("removeEventById"));
-        eventDao.deleteById(eventId);
+        eventRepository.deleteById(eventId);
     }
 
     public List<Event> findEventsByFixtureId(Long fixtureId) {
         LOGGER.info(LoggerMessage.FETCH.getMessage("findEventsByFixtureId"));
-        return eventDao.findAllByFixtureId(fixtureId);
+        return eventRepository.findAllByFixtureId(fixtureId);
     }
 
     public List<Event> findEventsBetweenDates(String from, String to) {
         LOGGER.info(LoggerMessage.FETCH.getMessage("findEventsBetweenDates"));
-        return eventDao.findAllByFixtureDateBetween(LocalDate.parse(from), LocalDate.parse(to));
+        return eventRepository.findAllByFixtureDateBetween(LocalDate.parse(from), LocalDate.parse(to));
     }
 
     public List<Event> findEventsByDate(String date) {
         LOGGER.info(LoggerMessage.FETCH.getMessage("findEventsByDate"));
-        return eventDao.findAllByFixtureDate(LocalDate.parse(date));
+        return eventRepository.findAllByFixtureDate(LocalDate.parse(date));
     }
 }

@@ -3,7 +3,7 @@ package com.bets_be.mapper;
 import com.bets_be.domain.Coupon;
 import com.bets_be.domain.User;
 import com.bets_be.domain.UserDto;
-import com.bets_be.repository.CouponDao;
+import com.bets_be.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserMapper {
 
-    private final CouponDao couponDao;
+    private final CouponRepository couponRepository;
 
     public User mapToUser(UserDto userDto) {
         return new User(
@@ -22,7 +22,7 @@ public class UserMapper {
                 userDto.getName(),
                 userDto.getLogin(),
                 userDto.getMail(),
-                couponDao.findAll().stream()
+                couponRepository.findAll().stream()
                         .filter(coupon -> coupon.getUser().getId().equals(userDto.getId()))
                         .collect(Collectors.toList())
         );

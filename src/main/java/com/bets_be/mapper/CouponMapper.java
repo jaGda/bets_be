@@ -5,8 +5,8 @@ import com.bets_be.domain.Coupon;
 import com.bets_be.domain.CouponDto;
 import com.bets_be.domain.Event;
 import com.bets_be.domain.RatesDto;
-import com.bets_be.repository.EventDao;
-import com.bets_be.repository.UserDao;
+import com.bets_be.repository.EventRepository;
+import com.bets_be.repository.UserRepository;
 import com.bets_be.service.CurrencyConverterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,18 +21,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CouponMapper {
 
-    private final UserDao userDao;
-    private final EventDao eventDao;
+    private final UserRepository userRepository;
+    private final EventRepository eventRepository;
     private final CurrencyConverterService currencyConverterService;
 
     public Coupon mapToCoupon(CouponDto couponDto) {
         return new CouponBuilder.Coupon()
                 .id(couponDto.getId())
-                .user(userDao.findById(couponDto.getUserId()).orElseThrow(
+                .user(userRepository.findById(couponDto.getUserId()).orElseThrow(
                         () -> new RuntimeException("User of id '" + couponDto.getUserId() + "' doesn't exist")
                 ))
                 .eventList(couponDto.getEventsId().stream()
-                        .map(eventDao::findById)
+                        .map(eventRepository::findById)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .collect(Collectors.toList()))
@@ -81,7 +81,7 @@ public class CouponMapper {
 
     private double calculateWinning(List<Long> events, double stake) {
         return stake * events.stream()
-                .map(eventDao::findById)
+                .map(eventRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .mapToDouble(Event::getOdd)
@@ -90,7 +90,7 @@ public class CouponMapper {
 
     private boolean isWinning(List<Long> events) {
         return events.stream()
-                .map(eventDao::findById)
+                .map(eventRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(Event::isWin).count() == events.size();

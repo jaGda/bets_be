@@ -12,36 +12,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class UserDaoTestSuit {
+class UserRepositoryTestSuit {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Test
     void testUserDaoSave() {
         //Given
         User user = new User("name", "login", "@wp.pl");
         //When
-        userDao.save(user);
+        userRepository.save(user);
         //Then
         Long id = user.getId();
-        Optional<User> savedUser = userDao.findById(id);
+        Optional<User> savedUser = userRepository.findById(id);
         assertTrue(savedUser.isPresent());
         //CleanUp
-        userDao.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Test
     void testUserDaoFindByMail() {
         //Given
         User user = new User("name", "login", "@wp.pl");
-        userDao.save(user);
+        userRepository.save(user);
         String mail = user.getMail();
         //When
-        List<User> savedUsers = userDao.findByMail(mail);
+        List<User> savedUsers = userRepository.findByMail(mail);
         //Then
         assertEquals(1, savedUsers.size());
         //CleanUp
-        userDao.deleteById(user.getId());
+        userRepository.deleteById(user.getId());
     }
 }

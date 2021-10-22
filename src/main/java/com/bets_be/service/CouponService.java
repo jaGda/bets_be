@@ -2,7 +2,7 @@ package com.bets_be.service;
 
 import com.bets_be.domain.Coupon;
 import com.bets_be.loggerInfo.LoggerMessage;
-import com.bets_be.repository.CouponDao;
+import com.bets_be.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,36 +15,36 @@ import java.util.List;
 public class CouponService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CouponService.class);
-    private final CouponDao couponDao;
+    private final CouponRepository couponRepository;
 
     public List<Coupon> getAllCoupons() {
         LOGGER.info(LoggerMessage.FETCH.getMessage("getAllCoupons"));
-        return couponDao.findAll();
+        return couponRepository.findAll();
     }
 
     public Coupon getCouponById(Long couponId) {
         LOGGER.info(LoggerMessage.FETCH.getMessage("getCouponById"));
-        return couponDao.findById(couponId).orElseThrow(
+        return couponRepository.findById(couponId).orElseThrow(
                 () -> new RuntimeException("Coupon of id '" + couponId + "' doesn't exist")
         );
     }
 
     public Coupon addCoupon(Coupon coupon) {
         LOGGER.info(LoggerMessage.CREATE.getMessage("addCoupon"));
-        return couponDao.save(coupon);
+        return couponRepository.save(coupon);
     }
 
     public Coupon updateCoupon(Coupon coupon) {
         LOGGER.info(LoggerMessage.UPDATE.getMessage("updateCoupon"));
-        if (couponDao.findById(coupon.getId()).isEmpty()) {
+        if (couponRepository.findById(coupon.getId()).isEmpty()) {
             throw new RuntimeException("Coupon of id '" + coupon.getId() + "' doesn't exist");
         } else {
-            return couponDao.save(coupon);
+            return couponRepository.save(coupon);
         }
     }
 
     public void removeCouponById(Long couponId) {
         LOGGER.info(LoggerMessage.DELETE.getMessage("removeCouponById"));
-        couponDao.deleteById(couponId);
+        couponRepository.deleteById(couponId);
     }
 }

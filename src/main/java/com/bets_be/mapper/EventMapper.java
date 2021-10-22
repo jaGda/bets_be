@@ -4,7 +4,7 @@ import com.bets_be.domain.Coupon;
 import com.bets_be.domain.Event;
 import com.bets_be.domain.EventDto;
 import com.bets_be.domain.FixtureDto;
-import com.bets_be.repository.CouponDao;
+import com.bets_be.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EventMapper {
 
-    private final CouponDao couponDao;
+    private final CouponRepository couponRepository;
 
     public Event mapToEvent(EventDto eventDto) {
         return new Event(
                 eventDto.getId(),
                 eventDto.getCouponsId().stream()
-                        .map(couponDao::findById)
+                        .map(couponRepository::findById)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .collect(Collectors.toList()),

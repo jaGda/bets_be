@@ -11,13 +11,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-class CouponDaoTestSuit {
+class CouponRepositoryTestSuit {
 
     @Autowired
-    private CouponDao couponDao;
+    private CouponRepository couponRepository;
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Test
     void testCouponDaoSaveWithCoupons() {
@@ -26,16 +26,16 @@ class CouponDaoTestSuit {
         Coupon coupon1 = new Coupon(user);
         Coupon coupon2 = new Coupon(user);
         //When
-        userDao.save(user);
-        couponDao.saveAll(List.of(coupon1, coupon2));
+        userRepository.save(user);
+        couponRepository.saveAll(List.of(coupon1, coupon2));
         //Then
-        List<Coupon> result = couponDao.findAllByUser(user);
+        List<Coupon> result = couponRepository.findAllByUser(user);
         assertEquals(2, result.size());
         //CleanUp
         try {
-            couponDao.deleteById(coupon1.getId());
-            couponDao.deleteById(coupon2.getId());
-            userDao.deleteById(user.getId());
+            couponRepository.deleteById(coupon1.getId());
+            couponRepository.deleteById(coupon2.getId());
+            userRepository.deleteById(user.getId());
         } catch (Exception e) {
             // do nothing
         }

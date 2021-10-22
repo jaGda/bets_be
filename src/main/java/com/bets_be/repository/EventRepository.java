@@ -10,7 +10,7 @@ import java.util.List;
 
 @Transactional
 @Repository
-public interface EventDao extends CrudRepository<Event, Long> {
+public interface EventRepository extends CrudRepository<Event, Long> {
 
     @Override
     List<Event> findAll();
