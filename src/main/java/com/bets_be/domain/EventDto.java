@@ -2,9 +2,11 @@ package com.bets_be.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class EventDto {

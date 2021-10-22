@@ -112,7 +112,7 @@ public class EventMapper {
         return event;
     }
 
-    public boolean checkIsWin(String status, String betValue, int homeGoals, int awayGoals) {
+    private boolean checkIsWin(String status, String betValue, int homeGoals, int awayGoals) {
         return status.equals("FT") && (homeGoals > awayGoals ? "Home".equals(betValue)
                 : homeGoals == awayGoals ? "Draw".equals(betValue)
                 : "Away".equals(betValue));
