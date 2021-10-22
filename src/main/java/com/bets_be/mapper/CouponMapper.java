@@ -26,24 +26,25 @@ public class CouponMapper {
     private final CurrencyConverterService currencyConverterService;
 
     public Coupon mapToCoupon(CouponDto couponDto) {
+        List<Event> events = couponDto.getEventsId().stream()
+                .map(eventRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
         return new CouponBuilder.Coupon()
                 .id(couponDto.getId())
                 .user(userRepository.findById(couponDto.getUserId()).orElseThrow(
                         () -> new RuntimeException("User of id '" + couponDto.getUserId() + "' doesn't exist")
                 ))
-                .eventList(couponDto.getEventsId().stream()
-                        .map(eventRepository::findById)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toList()))
+                .eventList(events)
                 .betCurrency(couponDto.getBetCurrency())
                 .stake(couponDto.getStake())
-                .winningsPLN(winningInCurrency(couponDto.getEventsId(), couponDto.getStake(), couponDto.getBetCurrency(), "PLN"))
-                .winningsUSA(winningInCurrency(couponDto.getEventsId(), couponDto.getStake(), couponDto.getBetCurrency(), "USD"))
-                .winningsEUR(winningInCurrency(couponDto.getEventsId(), couponDto.getStake(), couponDto.getBetCurrency(), "EUR"))
+                .winningsPLN(winningInCurrency(events, couponDto.getStake(), couponDto.getBetCurrency(), "PLN"))
+                .winningsUSA(winningInCurrency(events, couponDto.getStake(), couponDto.getBetCurrency(), "USD"))
+                .winningsEUR(winningInCurrency(events, couponDto.getStake(), couponDto.getBetCurrency(), "EUR"))
                 .betDate(LocalDate.parse(couponDto.getBetDate()))
                 .betTime(LocalTime.parse(couponDto.getBetTime()))
-                .isVictory(couponDto.isVictory() || isWinning(couponDto.getEventsId()))
+                .isVictory(couponDto.isVictory() || isWinning(events))
                 .build().getCoupon();
     }
 
@@ -71,7 +72,7 @@ public class CouponMapper {
                 .collect(Collectors.toList());
     }
 
-    private double winningInCurrency(List<Long> events, double stake, String betCurrency, String to) {
+    private double winningInCurrency(List<Event> events, double stake, String betCurrency, String to) {
         double winning = calculateWinning(events, stake);
         RatesDto ratesDto = currencyConverterService.fetchCurrency(betCurrency, to, winning).getRates();
         return Double.parseDouble(to.equals("PLN") ? ratesDto.getCurrencyPlnName().getRateForAmount()
@@ -79,20 +80,15 @@ public class CouponMapper {
                 : ratesDto.getCurrencyUsaName().getRateForAmount());
     }
 
-    private double calculateWinning(List<Long> events, double stake) {
+    private double calculateWinning(List<Event> events, double stake) {
         return stake * events.stream()
-                .map(eventRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
                 .mapToDouble(Event::getOdd)
                 .sum();
     }
 
-    private boolean isWinning(List<Long> events) {
+    private boolean isWinning(List<Event> events) {
         return events.stream()
-                .map(eventRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .filter(Event::isWin).count() == events.size();
+                .filter(Event::isWin)
+                .count() == events.size();
     }
 }

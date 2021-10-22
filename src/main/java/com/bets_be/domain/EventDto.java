@@ -3,8 +3,6 @@ package com.bets_be.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @AllArgsConstructor
