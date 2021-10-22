@@ -4,7 +4,6 @@ import com.bets_be.domain.*;
 import com.bets_be.repository.EventRepository;
 import com.bets_be.repository.UserRepository;
 import com.bets_be.service.CurrencyConverterService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -66,15 +66,15 @@ class CouponMapperTestSuit {
         //When
         Coupon coupon = mapper.mapToCoupon(dto);
         //Then
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(0L, coupon.getId()),
-                () -> Assertions.assertEquals(3, coupon.getEventList().size()),
-                () -> Assertions.assertEquals(123.55, coupon.getWinningsPLN()),
-                () -> Assertions.assertEquals(123.55, coupon.getWinningsUSA()),
-                () -> Assertions.assertEquals(123.55, coupon.getWinningsEUR()),
-                () -> Assertions.assertEquals(LocalDate.parse("2021-01-01"), coupon.getBetDate()),
-                () -> Assertions.assertEquals(LocalTime.parse("15:14:13"), coupon.getBetTime()),
-                () -> Assertions.assertFalse(coupon.isVictory())
+        assertAll(
+                () -> assertEquals(0L, coupon.getId()),
+                () -> assertEquals(3, coupon.getEventList().size()),
+                () -> assertEquals(123.55, coupon.getWinningsPLN()),
+                () -> assertEquals(123.55, coupon.getWinningsUSA()),
+                () -> assertEquals(123.55, coupon.getWinningsEUR()),
+                () -> assertEquals(LocalDate.parse("2021-01-01"), coupon.getBetDate()),
+                () -> assertEquals(LocalTime.parse("15:14:13"), coupon.getBetTime()),
+                () -> assertFalse(coupon.isVictory())
         );
     }
 
@@ -88,17 +88,17 @@ class CouponMapperTestSuit {
         //When
         CouponDto couponDto = mapper.mapToCouponDto(coupon);
         //Then
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(1L, couponDto.getId()),
-                () -> Assertions.assertEquals(28L, couponDto.getUserId()),
-                () -> Assertions.assertEquals(0, couponDto.getEventsId().size()),
-                () -> Assertions.assertEquals("EUR", couponDto.getBetCurrency()),
-                () -> Assertions.assertEquals(134, couponDto.getWinningsPLN()),
-                () -> Assertions.assertEquals(123, couponDto.getWinningsUSA()),
-                () -> Assertions.assertEquals(145, couponDto.getWinningsEUR()),
-                () -> Assertions.assertEquals("2021-10-22", couponDto.getBetDate()),
-                () -> Assertions.assertEquals("20:36:22", couponDto.getBetTime()),
-                () -> Assertions.assertFalse(coupon.isVictory())
+        assertAll(
+                () -> assertEquals(1L, couponDto.getId()),
+                () -> assertEquals(28L, couponDto.getUserId()),
+                () -> assertEquals(0, couponDto.getEventsId().size()),
+                () -> assertEquals("EUR", couponDto.getBetCurrency()),
+                () -> assertEquals(134, couponDto.getWinningsPLN()),
+                () -> assertEquals(123, couponDto.getWinningsUSA()),
+                () -> assertEquals(145, couponDto.getWinningsEUR()),
+                () -> assertEquals("2021-10-22", couponDto.getBetDate()),
+                () -> assertEquals("20:36:22", couponDto.getBetTime()),
+                () -> assertFalse(coupon.isVictory())
         );
     }
 
@@ -117,14 +117,14 @@ class CouponMapperTestSuit {
         //When
         List<CouponDto> couponDtoList = mapper.mapToCouponDtoList(List.of(coupon1, coupon2));
         //Then
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(2L, couponDtoList.get(1).getId()),
-                () -> Assertions.assertEquals(28L, couponDtoList.get(0).getUserId()),
-                () -> Assertions.assertEquals(2, couponDtoList.size()),
-                () -> Assertions.assertEquals("PLN", couponDtoList.get(1).getBetCurrency()),
-                () -> Assertions.assertEquals("2021-10-22", couponDtoList.get(0).getBetDate()),
-                () -> Assertions.assertEquals("20:36:22", couponDtoList.get(1).getBetTime()),
-                () -> Assertions.assertFalse(couponDtoList.get(0).isVictory())
+        assertAll(
+                () -> assertEquals(2L, couponDtoList.get(1).getId()),
+                () -> assertEquals(28L, couponDtoList.get(0).getUserId()),
+                () -> assertEquals(2, couponDtoList.size()),
+                () -> assertEquals("PLN", couponDtoList.get(1).getBetCurrency()),
+                () -> assertEquals("2021-10-22", couponDtoList.get(0).getBetDate()),
+                () -> assertEquals("20:36:22", couponDtoList.get(1).getBetTime()),
+                () -> assertFalse(couponDtoList.get(0).isVictory())
         );
     }
 }
